@@ -1,21 +1,17 @@
 package com.nanaten.retrofitcoroutine.api
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ApiService {
     companion object {
         private const val API_READ_TIMEOUT: Long = 10
         private const val API_CONNECT_TIMEOUT: Long = 10
-
-        private val gson =
-            GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create()
 
         private fun getOkhttpClient(): OkHttpClient {
             val logInterceptor = HttpLoggingInterceptor()
@@ -34,10 +30,13 @@ class ApiService {
         }
 
         private fun getRetrofit(): Retrofit {
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
             return Retrofit.Builder()
                 .client(getOkhttpClient())
                 .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
         }
 
