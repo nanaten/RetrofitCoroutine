@@ -16,6 +16,7 @@ class MainViewModel : ViewModel() {
     private val api = ApiService.get()
     val data = MutableLiveData<Repos>()
 
+    // コルーチンを使用しないAPI取得処理
     fun getRepos() {
         api.getRepos().enqueue(object : Callback<Repos> {
             override fun onResponse(call: Call<Repos>, response: Response<Repos>) {
@@ -28,6 +29,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
+    // コルーチンを使用したAPI取得処理
     fun getReposWithCoroutine() {
         viewModelScope.launch {
             try {

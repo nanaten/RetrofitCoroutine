@@ -16,10 +16,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Without Coroutine
         start_button_1.setOnClickListener {
             viewModel.getRepos()
         }
 
+        // With Coroutine
         start_button_2.setOnClickListener {
             viewModel.getReposWithCoroutine()
         }
